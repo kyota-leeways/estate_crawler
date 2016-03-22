@@ -32,6 +32,7 @@ def scrape(html_file):
         estate_base[key] = details[i].string
 
     estate_base = estate_parser.parse(estate_base)
+    # print(estate_base)
 
     each_estates = soup.find_all('li', class_='contentsInner')
     # print(each_estates)
@@ -74,5 +75,6 @@ estate_parser = Parser()
 for id in ids:
     url = "https://mansion-market.com/mansions/detail/{id}".format(id=id)
     f = urlopen(url)
+    print("id:", id)
     scrape(f)
     time.sleep(1)
