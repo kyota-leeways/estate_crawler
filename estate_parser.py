@@ -5,18 +5,19 @@ class Parser():
     def parse(self, estate):
         # estate['築年'] = int(re.sub('\D', '', str(estate.get('築年', '')) + '01'))
         estate['築年'] = self.parseBuiltYear(estate.get('築年', ''))
-        estate['総戸数'] = re.sub('\D', '', estate.get('総戸数', '0'))
-        estate['階数'] = re.sub('\D', '', estate.get('階数', '0'))
+        estate['総戸数'] = int(re.sub('\D', '', str(estate.get('総戸数', 0))))
+        estate['階数'] = int(re.sub('\D', '', str(estate.get('階数', 0))))
         estate['都道府県'] = self.extract_pref(estate.get('住所', ''))
         estate['所在地1'] = self.extract_city(
-            estate.get('住所', ''), estate.get('都道府県', ''))
+        estate.get('住所', ''), estate.get('都道府県', ''))
         floor_located = estate.get('所在階', '')
         if (floor_located == ''):
-           estate['所在階'] = ''
+            estate['所在階'] = ''
         else:
             estate['所在階'] = int(re.sub('\D', '', floor_located))
+        estate['徒歩分数'] = self.parseWalkTime(estate.get('交通'))
         estate['間取り'] = estate.get('間取り', '')
-        estate['専有面積'] = re.sub('[^.^0-9]', '', estate.get('専有面積', ''))
+        estate['専有面積'] = float(re.sub('[^.^0-9]', '', str(estate.get('専有面積', '0'))))
         estate['方角'] = estate.get('方角', '')
         return estate
 
@@ -29,6 +30,17 @@ class Parser():
         for city in data.CITY_TABLE[pref].values():
             if (address.count(city) == 1):
                 return city
+
+    def parseWalkTime(self, railway_info):
+        """
+        交通情報から最寄り駅の徒歩分数を取得
+        :param railway_info:
+        :return:
+        """
+        walk_time = re.sub('\D', '', railway_info)
+        walk_time = int(walk_time)
+        print(walk_time)
+        return walk_time
 
     def parseBuiltYear(self, built_year_str: str):
         """

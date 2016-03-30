@@ -1,7 +1,9 @@
+import sys
+sys.path.append('..')
 from urllib.request import urlopen
 from bs4 import BeautifulSoup
 import data
-from parser import Parser
+from estate_parser import Parser
 import re
 import pymongo
 import datetime
@@ -25,14 +27,18 @@ def scrape(html_file):
     #                5: 'number_of_floors', 6: 'building_structure',
     #                9: 'use_district_1'}
     detail_keys = {1: '住所', 2: '築年', 3: '総戸数',
-                   # 4: 'railways',
+                   4: '交通',
                    5: '階数', 6: '建物構造',
                    9: '用途地域'}
     for i, key in detail_keys.items():
-        estate_base[key] = details[i].string
+        if (key == '交通'):
+            estate_base[key] = details[i].find('li').getText()
+        else:
+            estate_base[key] = details[i].string
+    print(estate_base)
 
     estate_base = estate_parser.parse(estate_base)
-    # print(estate_base)
+    print(estate_base)
 
     each_estates = soup.find_all('li', class_='contentsInner')
     # print(each_estates)
@@ -69,7 +75,7 @@ def scrape(html_file):
             print("Duplicate estate", estate)
             continue
 
-ids = range(100, 28800)
+ids = range(1, 28800)
 estate_parser = Parser()
 
 for id in ids:
