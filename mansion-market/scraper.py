@@ -26,7 +26,7 @@ def scrape(html_file):
     #                # 4: 'railways',
     #                5: 'number_of_floors', 6: 'building_structure',
     #                9: 'use_district_1'}
-    detail_keys = {1: '住所', 2: '築年', 3: '総戸数',
+    detail_keys = {1: '住所', 2: '築年月', 3: '総戸数',
                    4: '交通',
                    5: '階数', 6: '建物構造',
                    9: '用途地域'}

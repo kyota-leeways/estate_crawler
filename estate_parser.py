@@ -4,7 +4,7 @@ import re
 class Parser():
     def parse(self, estate):
         # estate['築年'] = int(re.sub('\D', '', str(estate.get('築年', '')) + '01'))
-        estate['築年'] = self.parseBuiltYear(estate.get('築年', ''))
+        estate['築年月'] = self.parseBuiltYear(estate.get('築年月', ''))
         estate['総戸数'] = int(re.sub('\D', '', str(estate.get('総戸数', 0))))
         estate['階数'] = int(re.sub('\D', '', str(estate.get('階数', 0))))
         estate['都道府県'] = self.extract_pref(estate.get('住所', ''))
